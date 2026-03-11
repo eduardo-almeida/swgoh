@@ -1,0 +1,22 @@
+services:
+  # O motor do WhatsApp
+  waha:
+    image: devlikeapro/waha
+    container_name: waha
+    ports:
+      - "3000:3000"
+    restart: always
+    environment:
+      - WH_AUTHENTICATION=none
+
+  # Sua inteligência artificial (FastAPI)
+  app:
+    build: .
+    container_name: chatbot_api
+    ports:
+      - "8000:8000"
+    env_file: .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Permite que o container fale com o Ollama no seu PC
+    depends_on:
+      - waha
